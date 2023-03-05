@@ -20,7 +20,7 @@
 
 <body class="flex flex-col content-center items-center h-screen bg-slate-800 text-white ">
 
-  <div id="root" class=" p-16 overflow-scroll w-2/4 h-full">
+  <div id="root" class=" p-16 overflow-scroll w-1/4 h-full">
 
   </div>
 
@@ -35,25 +35,29 @@
         let cpu = $(`#${i}`);
         if (cpu.length) {
           // if it does, update the value
-          cpu.text(data[i]);
-          cpu.className = `w-full h-6 bg-gradient-to-r from-blue-500 bg-opacity-50`;
-          cpu.css('width', data[i])
+          let txt = $(`#txt-${i}`);
+          let inner = $(`#inner-${i}`);
+          txt.text(data[i]);
+          inner.css("width", data[i]);
         } else {
           // if it doesn't, create a new tag
           let cpu = document.createElement("div");
-          // use tailwind to color in the cpu usage based on the value
-          // fill the div color based on the value
-          // such that 100% fully colors the div and 0% leaves it uncolored
-          // and 20% colors 20% of the div
-          // use gradient to color the div
-          // https://tailwindcss.com/docs/gradient-color-stops
-          cpu.className = `w-full h-6 bg-gradient-to-r from-blue-500 bg-opacity-50`;
-          cpu.style = `width: ${data[i]};`;
 
+          let inner = document.createElement("div");
+          // TODO: find a better color scheme
+          inner.className = `w-full h-6 bg-indigo-500 bg-opacity-50 absolute transition-all duration-500 ease-in-out`;
+          inner.style = `width: ${data[i]};`;
+          inner.id = `inner-${i}`;
+
+          let txt = document.createElement("span");
+          txt.id = `txt-${i}`;
+          txt.innerText = data[i];
 
           cpu.id = i;
-          cpu.innerText = data[i];
+          cpu.className = 'm-2 relative'
           root.appendChild(cpu);
+          cpu.appendChild(inner)
+          cpu.appendChild(txt)
         }
       }
     }
