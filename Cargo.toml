@@ -1,0 +1,17 @@
+[package]
+name = "sse"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4.3.1"
+actix-web-lab = "0.19.1"
+env_logger = "0.10.0"
+futures-util = "0.3.26"
+log = "0.4.17"
+parking_lot = "0.12.1"
+tokio = "1.26.0"
+tokio-stream = "0.1.12"
+serde = { version = "1.0", features = ["derive"] }
