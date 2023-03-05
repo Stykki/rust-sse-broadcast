@@ -46,7 +46,9 @@ impl BroadcastStore {
         if *sys.is_sending_cpu_usage.lock() {
             return;
         }
-        *sys.is_sending_cpu_usage.lock() = true;
+        {
+            *sys.is_sending_cpu_usage.lock() = true;
+        }
 
         actix_web::rt::spawn(async move {
             let mut interval = interval(Duration::from_secs(2));
