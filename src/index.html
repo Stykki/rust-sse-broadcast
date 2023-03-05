@@ -51,7 +51,7 @@
 
   <script>
     let root = document.getElementById("root");
-    let events = new EventSource("/events/default");
+    let events = new EventSource("/events/cpu");
     events.onmessage = (event) => {
       let data = document.createElement("p");
       let time = new Date().toLocaleTimeString();

@@ -85,4 +85,14 @@ impl BroadcastStore {
             None => log::info!("channel {} not found", channel),
         }
     }
+
+    pub fn client_count(&self, channel: &str) -> usize {
+        let inner = self.inner.lock();
+        let recv = inner.clients.get(channel);
+
+        match recv {
+            Some(recv) => recv.len(),
+            None => 0,
+        }
+    }
 }
