@@ -63,6 +63,12 @@ async fn bc(
     bc_payload: web::Json<BcPayload>,
     broadcast_store: web::Data<BroadcastStore>,
 ) -> impl Responder {
+    log::info!(
+        "broadcasting message '{}' to channel '{}'",
+        bc_payload.msg,
+        bc_payload.channel
+    );
+
     broadcast_store
         .broadcast(&bc_payload.channel, &bc_payload.msg)
         .await;

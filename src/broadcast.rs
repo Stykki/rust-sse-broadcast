@@ -19,9 +19,7 @@ impl BroadcastStore {
         let this = Arc::new(BroadcastStore {
             inner: Mutex::new(BroadcasterInner::default()),
         });
-
         BroadcastStore::spawn_ping(Arc::clone(&this));
-
         this
     }
 
