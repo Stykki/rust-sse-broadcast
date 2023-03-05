@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+  <title>Cpu usage</title>
+  <style>
+    p {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col content-center items-center h-screen bg-slate-800 text-white ">
+
+  <div id="root" class=" p-16 overflow-scroll w-2/4 h-full">
+
+  </div>
+
+  <script>
+    let root = document.getElementById("root");
+    let events = new EventSource("/events/cpu");
+    events.onmessage = (event) => {
+      let reg = /[0-9]{1,2}: /g;
+      const data = event.data.replaceAll('\n', '').split(reg).slice(1);
+      for (let i = 0; i < data.length; i++) {
+        // check if a tag exists with the id of the cpu
+        let cpu = $(`#${i}`);
+        if (cpu.length) {
+          // if it does, update the value
+          cpu.text(data[i]);
+          cpu.className = `w-full h-6 bg-gradient-to-r from-blue-500 bg-opacity-50`;
+          cpu.css('width', data[i])
+        } else {
+          // if it doesn't, create a new tag
+          let cpu = document.createElement("div");
+          // use tailwind to color in the cpu usage based on the value
+          // fill the div color based on the value
+          // such that 100% fully colors the div and 0% leaves it uncolored
+          // and 20% colors 20% of the div
+          // use gradient to color the div
+          // https://tailwindcss.com/docs/gradient-color-stops
+          cpu.className = `w-full h-6 bg-gradient-to-r from-blue-500 bg-opacity-50`;
+          cpu.style = `width: ${data[i]};`;
+
+
+          cpu.id = i;
+          cpu.innerText = data[i];
+          root.appendChild(cpu);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

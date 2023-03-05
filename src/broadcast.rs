@@ -78,8 +78,16 @@ impl BroadcastStore {
         match recv {
             Some(_) => {
                 log::info!("broadcasting message to channel {}", channel);
-                for sender in inner.clients.get(channel).unwrap() {
-                    sender.send(sse::Data::new(msg)).await.unwrap();
+
+                let clients = inner.clients.get(channel);
+
+                match clients {
+                    Some(clients) => {
+                        for sender in clients {
+                            _ = sender.send(sse::Data::new(msg)).await;
+                        }
+                    }
+                    None => log::info!("channel {} not found", channel),
                 }
             }
             None => log::info!("channel {} not found", channel),

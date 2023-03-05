@@ -62,9 +62,10 @@ impl BroadcastStore {
                 let cpu_usage = sys.get_cpu_usage();
                 let cpu_usage = cpu_usage
                     .iter()
-                    .map(|cpu| format!("{}%", cpu.to_string()))
+                    .enumerate()
+                    .map(|(idx, cpu)| format!("\n{}: {}%", idx, cpu.to_string()))
                     .collect::<Vec<_>>()
-                    .join("\n");
+                    .join("");
 
                 this.broadcast("cpu", &cpu_usage).await;
             }
@@ -94,6 +95,7 @@ async fn main() -> io::Result<()> {
             .service(broadcast_msg)
             .service(sysinfo)
             .service(bc)
+            .service(cpu_page)
             .wrap(Logger::default())
     })
     .bind(("127.0.0.1", 8080))?
@@ -105,6 +107,11 @@ async fn main() -> io::Result<()> {
 #[get("/")]
 async fn index() -> impl Responder {
     Html(include_str!("index.html").to_string())
+}
+
+#[get("/cpu")]
+async fn cpu_page() -> impl Responder {
+    Html(include_str!("cpu.html").to_string())
 }
 
 #[get("/events/{channel}")]
